@@ -1,0 +1,3 @@
+CREATE DATABASE pricewatch;
+CREATE USER user_test WITH PASSWORD '123456';
+GRANT ALL PRIVILEGES ON DATABASE pricewatch to user_test;
