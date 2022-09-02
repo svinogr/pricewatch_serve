@@ -13,7 +13,7 @@ public class DtoUtils {
         var i = new Item();
         i.setId(entity.getId());
         i.setTitle(entity.getTitle());
-        i.setUrl_link(entity.getUrlLink());
+        i.setUrlLink(entity.getUrlLink());
         i.setImgLink(entity.getImgLink());
         i.setPriceList(new ArrayList<>());
 
@@ -42,16 +42,16 @@ public class DtoUtils {
     }
 
     public static ItemEntity itemToEntity(Item item) {
+        System.out.println(item);
         var itemEntity = new ItemEntity();
-        itemEntity.setId(null);
-        itemEntity.setUrlLink(item.getUrl_link());
+        itemEntity.setUrlLink(item.getUrlLink());
         itemEntity.setImgLink(item.getImgLink());
         itemEntity.setTitle(item.getTitle());
         itemEntity.setList(new ArrayList<>());
 
         var priceEntity = new PriceEntity();
-        priceEntity.setId(null);
         priceEntity.setItemId(itemEntity);
+
         priceEntity.setPrice(item.getPriceList().get(0).getPrice());
         priceEntity.setDate(item.getPriceList().get(0).getDate());
 

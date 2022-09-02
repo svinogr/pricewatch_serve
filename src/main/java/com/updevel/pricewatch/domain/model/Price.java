@@ -3,9 +3,9 @@ package com.updevel.pricewatch.domain.model;
 import java.util.Date;
 
 public class Price {
-    private Long id;
-    private Long itemId;
-    private Double price;
+    private long id;
+    private long itemId;
+    private double price;
     private Long date;
 
     public Long getId() {

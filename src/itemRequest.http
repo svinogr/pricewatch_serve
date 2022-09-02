@@ -1,0 +1,22 @@
+###
+GET http://localhost:8080/items/all
+
+
+###
+POST http://localhost:8080/items/add
+Content-Type: application/json
+
+{
+  "title": "test",
+  "urlLink": "test2",
+  "imgLink": "test",
+  "priceList": [
+    {
+      "price": 100,
+      "date": 1662105897880
+    }
+  ]
+}
+
+###
+GET http://localhost:8080/items/4

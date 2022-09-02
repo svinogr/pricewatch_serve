@@ -1,13 +1,14 @@
 package com.updevel.pricewatch.domain.model;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class Item {
-    private Long id;
+    private long id;
     private String title;
-    private String url_link;
+    private String urlLink;
     private String imgLink;
-    private List<Price> priceList;
+    private List<Price> priceList =  new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -25,12 +26,12 @@ public class Item {
         this.title = title;
     }
 
-    public String getUrl_link() {
-        return url_link;
+    public String getUrlLink() {
+        return urlLink;
     }
 
-    public void setUrl_link(String url_link) {
-        this.url_link = url_link;
+    public void setUrlLink(String urlLink) {
+        this.urlLink = urlLink;
     }
 
     public String getImgLink() {
@@ -47,5 +48,16 @@ public class Item {
 
     public void setPriceList(List<Price> priceList) {
         this.priceList = priceList;
+    }
+
+    @Override
+    public String toString() {
+        return "Item{" +
+                "id=" + id +
+                ", title='" + title + '\'' +
+                ", urlLink='" + urlLink + '\'' +
+                ", imgLink='" + imgLink + '\'' +
+                ", priceList=" + priceList.size() +
+                '}';
     }
 }
