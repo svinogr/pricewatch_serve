@@ -34,7 +34,7 @@ public class ServiceItem implements ItemServiceInterface {
         System.out.println(referenceById);
 
         var lastDate = new Date(referenceById.getList().get(referenceById.getList().size() - 1).getDate());
-        var nowDate  = new Date();
+        var nowDate = new Date();
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(lastDate);
@@ -63,5 +63,37 @@ public class ServiceItem implements ItemServiceInterface {
         save = Objects.requireNonNullElseGet(duplicate, () -> itemRepo.save(itemEntity));
 
         return DtoUtils.entityToItem(save);
+    }
+
+    @Override
+    public Item addToDbByUrl(String url) {
+        var duplicate = itemRepo.findDuplicate(url);
+
+        // если дубликата нет то нужно распарсить. записать в базу и отдать записаное
+        // если есть проверить последнюю дату.
+        // 1 если дата старая распарсить новую дату записать в базу и отдать
+        // 2 инчае отдать
+
+        if (duplicate == null) {
+            //TODO call service parsing
+            System.out.println("call service parsing");
+            //itemRepo.save(item);
+           //duplicate = item;
+        } else {
+            // узкое место. вдруг нолт вместо цены. но не должно быть нуля именно здесь )
+            if (checkLastDateIsOldest(duplicate.getLastPriceOrNull().getDate())) {
+                //TODO call service parsing
+                System.out.println("call service parsing");
+                //itemRepo.save(item);
+                //duplicate = item;
+            }
+        }
+
+        //return DtoUtils.entityToItem(duplicate);
+        return new Item();
+    }
+
+    private boolean checkLastDateIsOldest(long lastDate) {
+        return new Date(lastDate).getDay() < new Date().getDay();
     }
 }

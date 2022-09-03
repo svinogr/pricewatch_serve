@@ -11,4 +11,6 @@ public interface ItemServiceInterface {
     List<Item> getByList(List<Long> list) throws EntityNotFoundException;
 
     Item addToDb(Item item);
+
+    Item addToDbByUrl(String url);
 }

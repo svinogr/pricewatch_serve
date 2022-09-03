@@ -1,5 +1,6 @@
 package com.updevel.pricewatch.db.entities;
 
+import com.updevel.pricewatch.domain.model.Price;
 import org.hibernate.annotations.Cascade;
 
 import javax.persistence.*;
@@ -61,5 +62,11 @@ public class ItemEntity {
 
     public void setList(List<PriceEntity> list) {
         this.list = list;
+    }
+
+    public PriceEntity getLastPriceOrNull() {
+        if (list.isEmpty()) return null;
+
+        return list.get(list.size() - 1);
     }
 }

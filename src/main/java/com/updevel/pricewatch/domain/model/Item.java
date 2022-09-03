@@ -8,7 +8,7 @@ public class Item {
     private String title;
     private String urlLink;
     private String imgLink;
-    private List<Price> priceList =  new ArrayList<>();
+    private List<Price> priceList = new ArrayList<>();
 
     public Long getId() {
         return id;
@@ -59,5 +59,11 @@ public class Item {
                 ", imgLink='" + imgLink + '\'' +
                 ", priceList=" + priceList.size() +
                 '}';
+    }
+
+    public Price getLastPriceOrNull() {
+        if (priceList.isEmpty()) return null;
+
+        return priceList.get(priceList.size() - 1);
     }
 }
