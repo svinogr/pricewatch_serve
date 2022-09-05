@@ -1,15 +1,12 @@
 package com.updevel.pricewatch.db.entities;
 
-import com.updevel.pricewatch.domain.model.Price;
-import org.hibernate.annotations.Cascade;
-
 import javax.persistence.*;
 import java.util.List;
 
 @Entity(name = "items")
 public class ItemEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @Column(name = "title")

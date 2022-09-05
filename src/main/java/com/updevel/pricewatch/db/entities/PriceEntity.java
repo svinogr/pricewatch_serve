@@ -5,7 +5,7 @@ import javax.persistence.*;
 @Entity(name = "prices")
 public class PriceEntity {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne()

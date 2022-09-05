@@ -3,12 +3,12 @@ GET http://localhost:8080/items/all
 
 
 ###
-POST http://localhost:8080/items/add
+POST http://localhost:8080/items/addJSon
 Content-Type: application/json
 
 {
-  "title": "test",
-  "urlLink": "test2",
+  "title": "test2",
+  "urlLink": "https://www.dns-shop.ru/product/000014fb2260ed20/156-noutbuk-lenovo-v15-ada-seryj2",
   "imgLink": "test",
   "priceList": [
     {
@@ -21,6 +21,11 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/items/4
 
+
 ###
-###
-POST http://localhost:8080/items/url/wdwd
+POST http://localhost:8080/items/url/
+Content-Type: application/json
+
+{
+    "urlLink": "https://www.kasla.ru/catalog/smartfony/samsung/smartfon_samsung_galaxy_s21_fe.html"
+}

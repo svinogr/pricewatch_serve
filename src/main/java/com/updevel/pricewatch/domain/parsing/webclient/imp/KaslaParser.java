@@ -1,18 +1,48 @@
 package com.updevel.pricewatch.domain.parsing.webclient.imp;
 
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.gargoylesoftware.htmlunit.Page;
+import com.gargoylesoftware.htmlunit.WebClient;
+import com.gargoylesoftware.htmlunit.WebResponse;
+import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.updevel.pricewatch.domain.model.Item;
+import com.updevel.pricewatch.domain.model.Price;
 import com.updevel.pricewatch.domain.parsing.webclient.Parserable;
 import com.updevel.pricewatch.domain.parsing.webclient.WebClientable;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.springframework.beans.factory.annotation.Autowired;
+
+import java.io.IOException;
+import java.util.Date;
 
 public class KaslaParser implements Parserable {
-    private WebClientable w;
+    @Autowired
+    private KaslaWebClient kaslaWebClient;
 
-    public KaslaParser(WebClientable w) {
-        this.w = w;
-    }
+      @Override
+    public Item getParsedItem(String url) throws IOException {
+        WebClient webCliet = kaslaWebClient.getWebClient();
+        HtmlPage page = webCliet.getPage(url);
+        String s = page.asXml();
+        Document parse = Jsoup.parse(s);
+        Element section = parse.getElementById("tableContainer");
+        String img = section.getElementById("pictureContainer").getElementsByTag("a").attr("href").toString();
+        String title = parse.getElementById("right").getElementsByTag("h1").html();
+        String[] split = section.getElementById("elementTools").getElementsByClass("priceVal").get(0).text().split("руб");
+        String priceS = split[0].trim().replace(" ", "");
 
-    @Override
-    public Item getParsedItem(String url) {
-        return null;
+        Price price = new Price();
+        price.setPrice(Double.parseDouble(priceS));
+        price.setDate(new Date().getTime());
+
+        Item item = new Item();
+        item.setTitle(title);
+        item.setImgLink(img);
+        item.setUrlLink(url);
+        item.getPriceList().add(price);
+
+        return item;
     }
 }
