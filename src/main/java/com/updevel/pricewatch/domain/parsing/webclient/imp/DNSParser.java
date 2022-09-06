@@ -5,20 +5,20 @@ import com.gargoylesoftware.htmlunit.WebClient;
 import com.gargoylesoftware.htmlunit.WebResponse;
 import com.updevel.pricewatch.domain.model.Item;
 import com.updevel.pricewatch.domain.parsing.webclient.Parserable;
-import com.updevel.pricewatch.domain.parsing.webclient.WebClientable;
+import com.updevel.pricewatch.domain.parsing.webclient.imp.webclient.DNSWebClient;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
 public class DNSParser implements Parserable {
-    private WebClientable webClientable;
-
-    public DNSParser(WebClientable webClientable) {
-        this.webClientable = webClientable;
-    }
+    @Autowired
+    private DNSWebClient dnsWebClient;
 
     @Override
     public Item getParsedItem(String url) throws IOException {
-        WebClient webCliet = webClientable.getWebClient();
+        WebClient webCliet = dnsWebClient.getWebClient();
         Page page = webCliet.getPage(url + "window.location.hash");
         System.out.println(webCliet);
         System.out.println("****" + page.getWebResponse().getContentType());

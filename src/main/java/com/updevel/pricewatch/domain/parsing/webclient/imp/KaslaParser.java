@@ -1,24 +1,23 @@
 package com.updevel.pricewatch.domain.parsing.webclient.imp;
 
-import com.fasterxml.jackson.annotation.JsonAlias;
-import com.gargoylesoftware.htmlunit.Page;
 import com.gargoylesoftware.htmlunit.WebClient;
-import com.gargoylesoftware.htmlunit.WebResponse;
 import com.gargoylesoftware.htmlunit.html.HtmlPage;
 import com.updevel.pricewatch.domain.model.Item;
 import com.updevel.pricewatch.domain.model.Price;
 import com.updevel.pricewatch.domain.parsing.webclient.Parserable;
-import com.updevel.pricewatch.domain.parsing.webclient.WebClientable;
+import com.updevel.pricewatch.domain.parsing.webclient.imp.webclient.KaslaWebClient;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 import java.util.Date;
 
+@Component
 public class KaslaParser implements Parserable {
-    @Autowired
+   @Autowired
     private KaslaWebClient kaslaWebClient;
 
       @Override
