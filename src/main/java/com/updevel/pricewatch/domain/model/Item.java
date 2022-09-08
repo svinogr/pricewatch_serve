@@ -8,6 +8,7 @@ public class Item {
     private String title;
     private String urlLink;
     private String imgLink;
+    private String host;
     private List<Price> priceList = new ArrayList<>();
 
     public Long getId() {
@@ -48,6 +49,18 @@ public class Item {
 
     public void setPriceList(List<Price> priceList) {
         this.priceList = priceList;
+    }
+
+    public void setId(long id) {
+        this.id = id;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     @Override

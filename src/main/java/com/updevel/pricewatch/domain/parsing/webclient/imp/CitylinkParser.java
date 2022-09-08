@@ -6,13 +6,15 @@ import com.updevel.pricewatch.domain.parsing.webclient.imp.webclient.CitilinkWeb
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.net.URL;
+
 @Component
 public class CitylinkParser implements Parserable {
     @Autowired
     private CitilinkWebClient citilinkWebClient;
 
     @Override
-    public Item getParsedItem(String url) {
+    public Item getParsedItem(URL url) {
         return null;
     }
 }

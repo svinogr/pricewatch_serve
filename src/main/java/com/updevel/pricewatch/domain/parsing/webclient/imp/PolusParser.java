@@ -6,13 +6,15 @@ import com.updevel.pricewatch.domain.parsing.webclient.imp.webclient.PolusWebCli
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.net.URL;
+
 @Component
 public class PolusParser implements Parserable {
     @Autowired
     private PolusWebClient polusWebClient;
 
     @Override
-    public Item getParsedItem(String url) {
+    public Item getParsedItem(URL url) {
         return null;
     }
 }

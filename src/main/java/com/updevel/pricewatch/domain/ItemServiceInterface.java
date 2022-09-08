@@ -9,10 +9,8 @@ import java.util.List;
 
 public interface ItemServiceInterface {
     List<Item> getAll() throws EntityNotFoundException;
-    Item getById(Long id) throws EntityNotFoundException;
-    List<Item> getByList(List<Long> list) throws EntityNotFoundException;
-
+    Item getById(Long id) throws EntityNotFoundException, IOException;
+    List<Item> getByList(List<Item> list) throws EntityNotFoundException;
     Item addToDb(Item item);
-
     Item addToDbByUrl(String url) throws IOException;
 }

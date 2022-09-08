@@ -3,6 +3,19 @@ GET http://localhost:8080/items/all
 
 
 ###
+GET http://localhost:8080/items/
+Content-Type: application/json
+
+[
+  {
+    "id": 2
+  },
+  {
+   "id": 9
+  }
+]
+
+###
 POST http://localhost:8080/items/addJSon
 Content-Type: application/json
 
@@ -19,7 +32,7 @@ Content-Type: application/json
 }
 
 ###
-GET http://localhost:8080/items/4
+GET http://localhost:8080/items/1
 
 
 ###
@@ -27,5 +40,21 @@ POST http://localhost:8080/items/url/
 Content-Type: application/json
 
 {
-    "urlLink": "https://www.kasla.ru/catalog/smartfony/samsung/smartfon_samsung_galaxy_s21_fe.html"
+  "urlLink": "https://www.kasla.ru/catalog/smartfony/samsung/smartfon_samsung_galaxy_s21_fe.html"
+}
+
+###
+POST http://localhost:8080/items/url/
+Content-Type: application/json
+
+{
+  "urlLink": "https://kasla.ru/catalog/accessories/aksessuary_dlya_smartfonov/zashchitnye_stekla_dlya_smartfonov_kasla/zashchitnoe_steklo_xiaomi_mi_a2_chernoe_full_glue_3d.html"
+}
+
+###
+POST http://localhost:8080/items/url/
+Content-Type: application/json
+
+{
+  "urlLink": "https://kasla.ru/catalog/accessories/aksessuary_dlya_smartfonov/zashchitnye_stekla_dlya_smartfonov_kasla/zashchitnoe_steklo_3d_samsung_galaxy_s21_fe.html"
 }

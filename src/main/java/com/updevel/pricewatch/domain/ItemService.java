@@ -16,10 +16,12 @@ import javax.persistence.EntityNotFoundException;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 public class ItemService implements ItemServiceInterface {
@@ -38,30 +40,37 @@ public class ItemService implements ItemServiceInterface {
     }
 
     @Override
-    public Item getById(Long id) throws EntityNotFoundException {
+    public Item getById(Long id) throws EntityNotFoundException, IOException {
         ItemEntity referenceById = itemRepo.getReferenceById(id);
 
-        System.out.println(referenceById);
+        var lastDate = referenceById.getLastPriceOrNull().getDate();
 
-        var lastDate = new Date(referenceById.getList().get(referenceById.getList().size() - 1).getDate());
-        var nowDate = new Date();
-
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(lastDate);
-        System.out.println(calendar.before(new Date()));
-
-        if (lastDate.getDay() < nowDate.getDay()) {
-            //TODO запрос на актуалку цены
-            System.out.println("actualize price......." + " old date " + lastDate + "- " + nowDate);
-            System.out.println("actualize price......." + " old date " + lastDate.getTime() + "- " + nowDate.getTime());
+        if (checkLastDateIsOldest(lastDate)) {
+            referenceById = updateEntityWithNewPrice(referenceById);
         }
 
         return DtoUtils.entityToItem(referenceById);
     }
 
     @Override
-    public List<Item> getByList(List<Long> list) {
-        return null;
+    public List<Item> getByList(List<Item> list) {
+        List<Long> collect = list.stream().map(Item::getId).collect(Collectors.toList());
+        // return itemRepo.findAllById(collect).stream().map(entity -> DtoUtils.entityToItem(entity)).collect(Collectors.toList());
+        List<Item> itemList =  itemRepo.findAllById(collect).stream().map(entity -> {
+            if (checkLastDateIsOldest(entity.getLastPriceOrNull().getDate())) {
+                try {
+                    entity = updateEntityWithNewPrice(entity);
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            }
+
+            return entity;
+        }).map(DtoUtils::entityToItem).collect(Collectors.toList());
+
+        if (itemList.isEmpty()) throw new EntityNotFoundException();
+
+        return itemList;
     }
 
     @Override
@@ -76,14 +85,13 @@ public class ItemService implements ItemServiceInterface {
     }
 
     @Override
-    public Item addToDbByUrl(String url) throws IOException {
+    public Item addToDbByUrl(String urlString) throws MalformedURLException, IOException {
         Item result = null;
+        URL url = new URL(urlString);
+        boolean isHas = urlIsHostInDb(url);
+        if (!isHas) throw new MalformedURLException();
 
-        var host = new URL(url).getHost();
-        HostEntity hostEntity = hostRepo.findByHost(host);
-        if (hostEntity == null) throw new MalformedURLException();
-
-        var duplicate = itemRepo.findDuplicate(url);
+        var duplicate = itemRepo.findDuplicate(url.getPath());
 
         // если дубликата нет то нужно распарсить. записать в базу и отдать записаное
         // если есть проверить последнюю дату.
@@ -91,10 +99,7 @@ public class ItemService implements ItemServiceInterface {
         // 2 инчае отдать
 
         if (duplicate == null) {
-            //TODO call service parsing
-            System.out.println("call service parsing");
-            System.out.println("новая запись в базу");
-            System.out.println(host);
+            System.out.println("add new in db with parse");
             Item parsed = pars.getFabricByDomain(url);
             ItemEntity itemEntity = itemRepo.save(DtoUtils.itemToEntity(parsed));
 
@@ -102,21 +107,9 @@ public class ItemService implements ItemServiceInterface {
         } else {
             // узкое место. вдруг нолт вместо цены. но не должно быть нуля именно здесь )
             if (checkLastDateIsOldest(duplicate.getLastPriceOrNull().getDate())) {
-                Item parsed = pars.getFabricByDomain(url);
-                Price price = parsed.getPriceList().get(0);
-
-                PriceEntity priceEntity = new PriceEntity();
-                priceEntity.setPrice(price.getPrice());
-                priceEntity.setDate(price.getDate());
-
-                duplicate.getList().add(priceEntity);
-                ItemEntity save = itemRepo.save(duplicate);
-
-                System.out.println("call service parsing");
-                System.out.println("новая цена добавлена");
-
+                System.out.println("old price dublicat");
+                ItemEntity save = updateEntityWithNewPrice(duplicate);
                 result = DtoUtils.entityToItem(save);
-
             } else {
                 System.out.println("dublicat");
                 result = DtoUtils.entityToItem(duplicate);
@@ -126,15 +119,41 @@ public class ItemService implements ItemServiceInterface {
         return result;
     }
 
+    private boolean urlIsHostInDb(URL url) throws MalformedURLException {
+        var host =  url.getHost();
+        System.out.println(host);
+        if (!host.contains("www")) {
+            host = "www." + host;
+            System.out.println(host);
+        }
+
+        HostEntity hostEntity = hostRepo.findByHost(host);
+
+        return hostEntity != null;
+    }
+
     private boolean checkLastDateIsOldest(long lastDate) {
         Calendar calendar = Calendar.getInstance();
         Calendar calendar2 = Calendar.getInstance();
         calendar.setTime(new Date(lastDate));
-        boolean before = calendar.before(calendar2.getTime());
-        System.out.println(calendar.getTime());
-        System.out.println(calendar2.getTime());
-        System.out.println(before);
+        //LocalDate localDate = LocalDateTime.ofInstant(calendar.toInstant(), calendar.getTimeZone().toZoneId()).toLocalDate();
+        LocalDate a = LocalDate.of(calendar.get(Calendar.YEAR), calendar.get(Calendar.MONTH), calendar.get(Calendar.DAY_OF_MONTH));
+        LocalDate b = LocalDate.of(calendar2.get(Calendar.YEAR), calendar2.get(Calendar.MONTH), calendar2.get(Calendar.DAY_OF_MONTH));
 
-        return before;
+       return a.isBefore(b);
+    }
+
+    private ItemEntity updateEntityWithNewPrice(ItemEntity oldEntity) throws IOException {
+        Item parsed = pars.getFabricByDomain(new URL(oldEntity.getHost() + oldEntity.getUrlLink()));
+        Price price = parsed.getPriceList().get(0);
+
+        PriceEntity priceEntity = new PriceEntity();
+        priceEntity.setItemId(oldEntity);
+        priceEntity.setPrice(price.getPrice());
+        priceEntity.setDate(price.getDate());
+
+        oldEntity.getList().add(priceEntity);
+
+        return itemRepo.save(oldEntity);
     }
 }

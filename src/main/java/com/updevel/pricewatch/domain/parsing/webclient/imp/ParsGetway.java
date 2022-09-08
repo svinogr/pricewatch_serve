@@ -2,8 +2,10 @@ package com.updevel.pricewatch.domain.parsing.webclient.imp;
 
 import com.updevel.pricewatch.domain.model.Item;
 import com.updevel.pricewatch.domain.parsing.webclient.Parserable;
+import com.updevel.pricewatch.domain.util.DtoUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -20,8 +22,10 @@ public class ParsGetway {
     @Autowired
     private CitylinkParser citylinkParser;
 
-    public Item getFabricByDomain(String url) throws IOException {
-        var host = new URL(url).getHost();
+    public Item getFabricByDomain(URL url) throws IOException {
+        var host = url.getHost();
+        System.out.println("host getF " + host);
+
         switch (host) {
             case "www.dns-shop.ru" -> {
                 return dnsParser.getParsedItem(url);

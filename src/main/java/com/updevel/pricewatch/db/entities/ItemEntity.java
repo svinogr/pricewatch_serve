@@ -18,7 +18,10 @@ public class ItemEntity {
     @Column(name = "img_link")
     private String imgLink;
 
-    @OneToMany(mappedBy = "itemId", cascade = CascadeType.PERSIST)
+    @Column(name = "host")
+    private String host;
+
+    @OneToMany(mappedBy = "itemId", cascade = CascadeType.ALL)
     private List<PriceEntity> list;
 
     public Long getId() {
@@ -59,6 +62,14 @@ public class ItemEntity {
 
     public void setList(List<PriceEntity> list) {
         this.list = list;
+    }
+
+    public String getHost() {
+        return host;
+    }
+
+    public void setHost(String host) {
+        this.host = host;
     }
 
     public PriceEntity getLastPriceOrNull() {

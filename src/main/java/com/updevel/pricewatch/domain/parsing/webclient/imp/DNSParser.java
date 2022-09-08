@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URL;
 
 @Component
 public class DNSParser implements Parserable {
@@ -17,7 +18,7 @@ public class DNSParser implements Parserable {
     private DNSWebClient dnsWebClient;
 
     @Override
-    public Item getParsedItem(String url) throws IOException {
+    public Item getParsedItem(URL url) throws IOException {
         WebClient webCliet = dnsWebClient.getWebClient();
         Page page = webCliet.getPage(url + "window.location.hash");
         System.out.println(webCliet);
@@ -28,8 +29,6 @@ public class DNSParser implements Parserable {
             System.out.println(jsonString);
             System.out.println(webCliet);
         }
-
-        System.out.println();
 
         return null;
     }

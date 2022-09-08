@@ -5,6 +5,8 @@ import com.updevel.pricewatch.db.entities.PriceEntity;
 import com.updevel.pricewatch.domain.model.Item;
 import com.updevel.pricewatch.domain.model.Price;
 
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -15,6 +17,7 @@ public class DtoUtils {
         i.setTitle(entity.getTitle());
         i.setUrlLink(entity.getUrlLink());
         i.setImgLink(entity.getImgLink());
+        i.setHost(entity.getHost());
         i.setPriceList(new ArrayList<>());
 
         entity.getList().forEach(priceEntity -> {
@@ -46,6 +49,7 @@ public class DtoUtils {
         var itemEntity = new ItemEntity();
         itemEntity.setUrlLink(item.getUrlLink());
         itemEntity.setImgLink(item.getImgLink());
+        itemEntity.setHost(item.getHost());
         itemEntity.setTitle(item.getTitle());
         itemEntity.setList(new ArrayList<>());
 
@@ -58,5 +62,42 @@ public class DtoUtils {
         itemEntity.getList().add(priceEntity);
 
         return itemEntity;
+    }
+
+/*    public static String urlWithoutHost(URL url) {
+        String result = null;
+
+        try {
+            String host = new url.getHost();
+            String urls[] = url.split(host);
+
+            result = urls[1];
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
+    }*/
+
+    public static String hostWithoutUrl(String urlString) {
+        String result = null;
+
+        try {
+            URL url = new URL(urlString);
+            System.out.println(url.getProtocol());
+
+            String host = new URL(urlString).getHost();
+
+            if(!host.contains("www")) {
+                host = "www." + host;
+            }
+
+            result = host;
+
+        } catch (MalformedURLException e) {
+            throw new RuntimeException(e);
+        }
+
+        return result;
     }
 }

@@ -13,15 +13,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
+import java.net.URL;
 import java.util.Date;
 
 @Component
 public class KaslaParser implements Parserable {
-   @Autowired
+    @Autowired
     private KaslaWebClient kaslaWebClient;
 
-      @Override
-    public Item getParsedItem(String url) throws IOException {
+    @Override
+    public Item getParsedItem(URL url) throws IOException {
         WebClient webCliet = kaslaWebClient.getWebClient();
         HtmlPage page = webCliet.getPage(url);
         String s = page.asXml();
@@ -39,8 +40,9 @@ public class KaslaParser implements Parserable {
         Item item = new Item();
         item.setTitle(title);
         item.setImgLink(img);
-        item.setUrlLink(url);
         item.getPriceList().add(price);
+
+        prepareUrl(item, url);
 
         return item;
     }

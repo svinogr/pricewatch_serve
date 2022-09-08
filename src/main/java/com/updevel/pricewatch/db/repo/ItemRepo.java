@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
 public interface ItemRepo extends JpaRepository<ItemEntity, Long> {
-    @Query(value = "SELECT * from items where url_Link= :urlLink", nativeQuery = true)
-    ItemEntity findDuplicate(@Param("urlLink") String urlLink);
+    @Query(value = "SELECT * from items where url_Link= :urlLinkWithoutHost", nativeQuery = true)
+    ItemEntity findDuplicate(@Param("urlLink") String urlLinkWithoutHost);
+
 }
