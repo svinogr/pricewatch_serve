@@ -18,7 +18,7 @@ import java.util.Date;
 
 @Component
 public class KaslaParser implements Parserable {
-    @Autowired
+   @Autowired
     private KaslaWebClient kaslaWebClient;
 
     @Override
