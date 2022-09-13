@@ -7,6 +7,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import javax.persistence.EntityNotFoundException;
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.net.MalformedURLException;
@@ -24,13 +25,15 @@ public class ItemContoroller {
         return itemService.getAll();
     }
 
-    @PostMapping("/url/")
+    @PostMapping("/url")
     @ResponseBody
     public Item addNewItemByUrl(@RequestBody Item item, HttpServletResponse response) {
+        System.out.println(item);
         try {
             item = itemService.addToDbByUrl(item.getUrlLink());
-
+            System.out.println(item);
         } catch (MalformedURLException e) {
+            System.out.println(item);
             response.setStatus(400);
             return item;
         } catch (IOException e) {
@@ -41,7 +44,7 @@ public class ItemContoroller {
         return item;
     }
 
-    @GetMapping("")
+    @PostMapping("")
     @ResponseBody
     public List<Item> getItemsById(@RequestBody List<Item> list, HttpServletResponse response) {
         try {
@@ -51,6 +54,7 @@ public class ItemContoroller {
             response.setStatus(404);
         }
 
+        System.out.println(list);
         return list;
     }
 

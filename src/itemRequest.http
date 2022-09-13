@@ -58,3 +58,11 @@ Content-Type: application/json
 {
   "urlLink": "https://kasla.ru/catalog/accessories/aksessuary_dlya_smartfonov/zashchitnye_stekla_dlya_smartfonov_kasla/zashchitnoe_steklo_3d_samsung_galaxy_s21_fe.html"
 }
+###
+
+POST http://localhost:8080/items/url/
+Content-Type: application/json
+
+{
+  "urlLink": "https://kasla.ru/catalog/smartfony/xiaomi/smartfon_xiaomi_redmi_note_10s_nfc_ru.html"
+}

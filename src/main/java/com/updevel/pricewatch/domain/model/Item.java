@@ -1,5 +1,7 @@
 package com.updevel.pricewatch.domain.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -9,6 +11,7 @@ public class Item {
     private String urlLink;
     private String imgLink;
     private String host;
+
     private List<Price> priceList = new ArrayList<>();
 
     public Long getId() {
@@ -73,7 +76,7 @@ public class Item {
                 ", priceList=" + priceList.size() +
                 '}';
     }
-
+    @JsonIgnore
     public Price getLastPriceOrNull() {
         if (priceList.isEmpty()) return null;
 
