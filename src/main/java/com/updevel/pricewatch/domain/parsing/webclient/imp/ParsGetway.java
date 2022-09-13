@@ -23,7 +23,7 @@ public class ParsGetway {
     private CitylinkParser citylinkParser;
 
     public Item getFabricByDomain(URL url) throws IOException {
-        var host = url.getHost();
+        var host = DtoUtils.hostWithoutUrl(url);
         System.out.println("host getF " + host);
 
         switch (host) {

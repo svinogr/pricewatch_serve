@@ -79,24 +79,16 @@ public class DtoUtils {
         return result;
     }*/
 
-    public static String hostWithoutUrl(String urlString) {
+    public static String hostWithoutUrl(URL urlString) {
         String result = null;
 
-        try {
-            URL url = new URL(urlString);
-            System.out.println(url.getProtocol());
-
-            String host = new URL(urlString).getHost();
+            String host = urlString.getHost();
 
             if(!host.contains("www")) {
                 host = "www." + host;
             }
 
             result = host;
-
-        } catch (MalformedURLException e) {
-            throw new RuntimeException(e);
-        }
 
         return result;
     }
